@@ -72,8 +72,8 @@ router.post('/', upload.fields([
   encryptFile(rawSoundPath, encryptedSoundPath);
 
   // Optionally: xoá file gốc không mã hoá
-//   fs.unlinkSync(rawImagePath);
-//   fs.unlinkSync(rawSoundPath);
+  //  fs.unlinkSync(rawImagePath);
+  //  fs.unlinkSync(rawSoundPath);
 
   return res.status(201).json({
     name,
