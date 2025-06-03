@@ -7,7 +7,7 @@ import mixRoutes from './routes/mix.routes';
 import uploadRoutes from './routes/upload.routes';
 
 const app = express();
-const PORT = 5000;
+const PORT = 3000;
 
 // Middleware
 app.use(express.json());
