@@ -1,6 +1,5 @@
 import express from 'express';
-import { getMixes, createMix } from '../controllers/mix.controller';
-import { updateMixById } from '../controllers/mix.controller';
+import { getMixes, getAllMixes, createMix, updateMixById } from '../controllers/mix.controller';
 
 const router = express.Router();
 
@@ -18,9 +17,20 @@ const router = express.Router();
  *         description: Mã thiết bị
  *     responses:
  *       200:
- *         description: Trả về danh sách mix
+ *         description: Trả về danh sách mix theo deviceId
  */
 router.get('/', getMixes);
+
+/**
+ * @swagger
+ * /api/mix/all:
+ *   get:
+ *     summary: Lấy toàn bộ bản phối âm thanh (dành cho admin)
+ *     responses:
+ *       200:
+ *         description: Trả về toàn bộ danh sách mix
+ */
+router.get('/all', getAllMixes);
 
 /**
  * @swagger
@@ -48,9 +58,10 @@ router.get('/', getMixes);
  *                   type: number
  *     responses:
  *       201:
- *         description: Trả về mix vừa tạo
+ *         description: Trả về bản phối vừa tạo
  */
 router.post('/', createMix);
+
 /**
  * @swagger
  * /api/mix/{id}:
@@ -83,6 +94,5 @@ router.post('/', createMix);
  *         description: Không tìm thấy bản phối
  */
 router.put('/:id', updateMixById);
-
 
 export default router;

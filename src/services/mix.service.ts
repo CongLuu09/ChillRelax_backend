@@ -5,16 +5,33 @@ import { Mix } from '../models/mix.model';
 const mixDataPath = path.join(__dirname, '../../data/mixes.data.json');
 
 function readMixData(): Mix[] {
-  const raw = fs.readFileSync(mixDataPath, 'utf-8');
-  return JSON.parse(raw);
+  try {
+    if (!fs.existsSync(mixDataPath)) {
+      // Nếu file chưa có, trả về mảng rỗng
+      return [];
+    }
+    const raw = fs.readFileSync(mixDataPath, 'utf-8');
+    return JSON.parse(raw);
+  } catch (error) {
+    console.error('❌ Error reading mix data:', error);
+    return [];
+  }
 }
 
 function writeMixData(mixes: Mix[]) {
-  fs.writeFileSync(mixDataPath, JSON.stringify(mixes, null, 2));
+  try {
+    fs.writeFileSync(mixDataPath, JSON.stringify(mixes, null, 2));
+  } catch (error) {
+    console.error('❌ Error writing mix data:', error);
+  }
 }
 
 export function getMixesByDevice(deviceId: string): Mix[] {
   return readMixData().filter(mix => mix.deviceId === deviceId);
+}
+
+export function getAllMixesService(): Mix[] {
+  return readMixData();
 }
 
 export function addMix(mixInput: Omit<Mix, 'id' | 'createdAt'>): Mix {
@@ -28,7 +45,11 @@ export function addMix(mixInput: Omit<Mix, 'id' | 'createdAt'>): Mix {
   writeMixData(mixes);
   return newMix;
 }
-export function updateMix(id: number, updatedFields: Partial<Omit<Mix, 'id' | 'deviceId' | 'createdAt'>>): Mix | null {
+
+export function updateMix(
+  id: number, 
+  updatedFields: Partial<Omit<Mix, 'id' | 'deviceId' | 'createdAt'>>
+): Mix | null {
   const mixes = readMixData();
   const index = mixes.findIndex(m => m.id === id);
 
