@@ -100,8 +100,8 @@ router.post('/', upload.fields([
   const newSound = {
     id: maxId + 1,
     name,
-    fileSoundUrl: getUrlWithoutEnc(`/public/sounds/${path.basename(encryptedSoundPath)}`),
-    fileImageUrl: getUrlWithoutEnc(`/public/images/${path.basename(encryptedImagePath)}`),
+    fileSoundUrl: getUrlWithoutEnc(`/sounds/${path.basename(encryptedSoundPath)}`),
+    fileImageUrl: getUrlWithoutEnc(`/images/${path.basename(encryptedImagePath)}`),
     category,
     createdAt: now,
     createdAtStr: nowStr,

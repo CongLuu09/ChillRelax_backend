@@ -12,11 +12,12 @@
       display: flex;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f0f2f5;
+      padding-top: 60px !important;
     }
     .sidebar {
       height: 100vh;
       width: 220px;
-      background-color: #212529;
+      background: #212529;
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -26,6 +27,18 @@
       overflow-y: auto;
       box-shadow: 2px 0 5px rgb(0 0 0 / 0.5);
       z-index: 10;
+    }
+    .sidebar-logo {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .sidebar-logo img {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      box-shadow: 0 0.25rem 1rem #0d6efd33;
+      background: #fff;
+      object-fit: cover;
     }
     .sidebar h3 {
       font-weight: 700;
@@ -40,16 +53,17 @@
       font-size: 1.05rem;
       color: #adb5bd;
       text-decoration: none;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      transition: background-color 0.3s, color 0.3s;
       display: flex;
       align-items: center;
       gap: 0.5rem;
       user-select: none;
     }
     .sidebar a:hover, .sidebar a.active {
-      background-color: #0d6efd;
-      color: #fff;
+      background: linear-gradient(90deg,#0d6efd 60%,#5fa8ff 100%);
+      color: #fff !important;
       border-radius: 0 25px 25px 0;
+      font-weight: 700;
       text-decoration: none;
     }
     .sidebar a.btn-api-docs {
@@ -89,6 +103,7 @@
       display: flex;
       gap: 1.5rem;
       flex-wrap: wrap;
+      margin-bottom: 2rem;
     }
     .dashboard-card {
       flex: 1 1 220px;
@@ -97,7 +112,7 @@
       box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.1);
       padding: 1.5rem 2rem;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+      transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
       user-select: none;
       display: flex;
       flex-direction: column;
@@ -105,12 +120,17 @@
       justify-content: center;
       text-align: center;
       color: #495057;
+      border: 2px solid transparent;
     }
+    .dashboard-card.sounds { color: #0d6efd; background: linear-gradient(135deg,#e0e7ff 60%,#fff 100%);}
+    .dashboard-card.mixes { color: #198754; background: linear-gradient(135deg,#e6f4ea 60%,#fff 100%);}
+    .dashboard-card.uploads { color: #ffc107; background: linear-gradient(135deg,#fffbe6 60%,#fff 100%);}
     .dashboard-card:hover {
       background-color: #e9f0ff;
-      transform: translateY(-6px);
+      transform: translateY(-6px) scale(1.03);
       box-shadow: 0 1rem 2rem rgb(0 0 0 / 0.2);
       color: #0d6efd;
+      border: 2px solid #0d6efd33;
     }
     .dashboard-card h5 {
       font-size: 1.25rem;
@@ -123,11 +143,8 @@
       color: inherit;
       user-select: text;
     }
-    .dashboard-card.sounds { color: #0d6efd; }
-    .dashboard-card.mixes { color: #198754; }
-    .dashboard-card.uploads { color: #ffc107; }
     section.details {
-      margin-top: 3rem;
+      margin-top: 2rem;
       background: #fff;
       border-radius: 0.75rem;
       box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.1);
@@ -146,7 +163,7 @@
       user-select: text;
     }
     thead tr {
-      background-color: #0d6efd;
+      background: linear-gradient(90deg,#0d6efd 60%,#5fa8ff 100%);
       color: #fff;
       font-weight: 600;
     }
@@ -177,15 +194,40 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-
     .modal .form-label { font-weight: 500; }
     .modal .form-control:focus { border-color: #0d6efd; box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25); }
     .btn-edit-user { margin-right: 0.5rem; }
+    @media (max-width: 991px) {
+      .sidebar { width: 100px; }
+      .sidebar a { font-size: 0.9rem; padding: 10px 10px; }
+      .content { margin-left: 100px; padding: 1.5rem 0.5rem; }
+      .dashboard-cards { flex-direction: column; gap: 1rem; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .content { margin-left: 0; padding: 1rem 0.2rem; }
+      .dashboard-cards { flex-direction: column; gap: 1rem; }
+    }
   </style>
 </head>
 <body>
+  <header class="admin-header d-flex align-items-center justify-content-between px-4 py-2 shadow-sm"
+    style="background:linear-gradient(90deg,#0d6efd 60%,#5fa8ff 100%);position:fixed;top:0;left:220px;right:0;z-index:20;height:60px;">
+    <div>
+      <span class="fw-bold fs-4 text-white">Chill Relax Admin</span>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+      <span class="fw-semibold text-white">Xin chào, <span id="adminName">Admin</span></span>
+      <img src="/public/images/fileImage-1748510717131-857231684.png" alt="Admin Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #fff;">
+      <button class="btn btn-light btn-sm" onclick="logoutAdmin()"><i class="bi bi-box-arrow-right"></i> Logout</button>
+    </div>
+  </header>
+
   <nav class="sidebar">
-    <h3>Chill Relax Admin</h3>
+    <div class="sidebar-logo">
+      <img src="/public/images/fileImage-1748511240725-219330198.png" alt="Logo" />
+    </div>
+    <h3>Chill Relax</h3>
     <a href="#" class="active" id="menuDashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
     <a href="#" id="menuSounds"><i class="bi bi-music-note-list"></i> Manage Sounds</a>
     <a href="#" id="menuMixes"><i class="bi bi-sliders"></i> Manage Mixes</a>
@@ -199,7 +241,6 @@
     <h1 id="mainTitle">Welcome to Chill Relax Admin Dashboard</h1>
     <p id="mainDesc">This is your admin panel where you can manage sounds, mixes, uploads and users.</p>
 
-
     <section id="dashboardSection">
       <button id="btnRefresh" class="btn btn-primary" title="Reload all stats and detail table">
         Refresh Stats
@@ -207,15 +248,18 @@
       </button>
       <section class="dashboard-cards">
         <div id="cardTotalSounds" class="dashboard-card sounds" title="Click to see all sounds">
-          <h5><i class="bi bi-music-note-beamed"></i> Total Sounds</h5>
+          <div style="font-size:2.5rem;"><i class="bi bi-music-note-beamed"></i></div>
+          <h5>Total Sounds</h5>
           <div class="stat-number" id="totalSounds">--</div>
         </div>
         <div id="cardTotalMixes" class="dashboard-card mixes" title="Click to see all mixes">
-          <h5><i class="bi bi-sliders"></i> Total Mixes</h5>
+          <div style="font-size:2.5rem;"><i class="bi bi-sliders"></i></div>
+          <h5>Total Mixes</h5>
           <div class="stat-number" id="totalMixes">--</div>
         </div>
         <div id="cardUploadsPending" class="dashboard-card uploads" title="Click to upload new sound">
-          <h5><i class="bi bi-cloud-arrow-up"></i> Uploads Pending</h5>
+          <div style="font-size:2.5rem;"><i class="bi bi-cloud-arrow-up"></i></div>
+          <h5>Uploads Pending</h5>
           <div class="stat-number" id="pendingUploads">--</div>
         </div>
       </section>
@@ -229,7 +273,6 @@
         </table>
       </section>
     </section>
-
 
     <section id="usersSection" style="display:none;">
       <h2>Users</h2>
@@ -250,42 +293,42 @@
     </section>
   </main>
 
+
   <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <form id="addUserForm" class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+          <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="mb-3">
             <label for="addUsername" class="form-label">Username</label>
-            <input class="form-control" type="text" id="addUsername" name="username" required>
-          </div>
-          <div class="mb-3">
-            <label for="addPassword" class="form-label">Password</label>
-            <input class="form-control" type="password" id="addPassword" name="password" required>
+            <input type="text" class="form-control" id="addUsername" name="username" required>
           </div>
           <div class="mb-3">
             <label for="addEmail" class="form-label">Email</label>
-            <input class="form-control" type="email" id="addEmail" name="email">
+            <input type="email" class="form-control" id="addEmail" name="email">
           </div>
           <div class="mb-3">
             <label for="addRole" class="form-label">Role</label>
-            <select class="form-control" id="addRole" name="role">
+            <select class="form-select" id="addRole" name="role" required>
               <option value="user">User</option>
               <option value="admin">Admin</option>
             </select>
           </div>
+          <div class="mb-3">
+            <label for="addPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="addPassword" name="password" required>
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Add User</button>
+          <button type="submit" class="btn btn-primary">Add</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
       </form>
     </div>
   </div>
-
 
   <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -298,22 +341,22 @@
           <input type="hidden" id="editUserId" name="id">
           <div class="mb-3">
             <label for="editUsername" class="form-label">Username</label>
-            <input class="form-control" type="text" id="editUsername" name="username" required>
+            <input type="text" class="form-control" id="editUsername" name="username" required>
           </div>
           <div class="mb-3">
             <label for="editEmail" class="form-label">Email</label>
-            <input class="form-control" type="email" id="editEmail" name="email">
+            <input type="email" class="form-control" id="editEmail" name="email">
           </div>
           <div class="mb-3">
             <label for="editRole" class="form-label">Role</label>
-            <select class="form-control" id="editRole" name="role">
+            <select class="form-select" id="editRole" name="role" required>
               <option value="user">User</option>
               <option value="admin">Admin</option>
             </select>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <button type="submit" class="btn btn-primary">Save</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
       </form>
@@ -325,34 +368,25 @@
     <div class="modal-dialog">
       <form id="uploadForm" class="modal-content" enctype="multipart/form-data">
         <div class="modal-header">
-          <h5 class="modal-title" id="uploadModalLabel">Upload New Sound</h5>
+          <h5 class="modal-title" id="uploadModalLabel">Upload Sound</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="mb-3">
-            <label for="fileSound" class="form-label">Choose sound file</label>
-            <input class="form-control" type="file" id="fileSound" name="fileSound" accept="audio/*" required>
+            <label for="name" class="form-label">Sound Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
           </div>
           <div class="mb-3">
-            <label for="fileImage" class="form-label">Choose image</label>
-            <input class="form-control" type="file" id="fileImage" name="fileImage" accept="image/*" required>
+            <label for="category" class="form-label">Category</label>
+            <input type="text" class="form-control" id="category" name="category" required>
           </div>
           <div class="mb-3">
-            <label for="soundName" class="form-label">Sound name</label>
-            <input class="form-control" type="text" id="soundName" name="name" required>
+            <label for="fileSound" class="form-label">Sound File</label>
+            <input type="file" class="form-control" id="fileSound" name="fileSound" accept="audio/*" required>
           </div>
           <div class="mb-3">
-            <label for="soundCategory" class="form-label">Category</label>
-            <select class="form-control" id="soundCategory" name="category" required>
-              <option value="">-- Select category --</option>
-              <option value="Music">Music</option>
-              <option value="Animals Sounds">Animals Sounds</option>
-              <option value="Citys Sounds">Citys Sounds</option>
-              <option value="Chill & Relax">Chill & Relax</option>
-              <option value="Fire Sounds">Fire Sounds</option>
-              <option value="Nature Sounds">Nature Sounds</option>
-              <option value="Homes Sounds">Homes Sounds</option>
-            </select>
+            <label for="fileImage" class="form-label">Image File</label>
+            <input type="file" class="form-control" id="fileImage" name="fileImage" accept="image/*" required>
           </div>
         </div>
         <div class="modal-footer">
@@ -365,14 +399,13 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!user || user.role !== 'admin') {
+        window.location.href = 'login.html';
+      }
+    });
 
- document.addEventListener('DOMContentLoaded', function() {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (!user || user.role !== 'admin') {
-      window.location.href = 'login.html';
-    }
-  });
-    
     const loadingSpinner = document.getElementById('loadingSpinner');
     let currentDetailType = null; // "sounds" | "mixes" | "uploads"
 
@@ -509,8 +542,6 @@
 
     const currentUserRole = 'admin';
 
-   
-
     async function loadUsers() {
       document.getElementById('mainTitle').textContent = 'Manage Users';
       document.getElementById('mainDesc').textContent = 'View and manage all users in the system.';
@@ -575,7 +606,6 @@
       }
     }
 
-
     document.getElementById('btnAddUser').addEventListener('click', () => {
       document.getElementById('addUserForm').reset();
       const modal = new bootstrap.Modal(document.getElementById('addUserModal'));
@@ -605,7 +635,6 @@
       }
     });
 
-
     document.getElementById('editUserForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const id = document.getElementById('editUserId').value;
@@ -631,7 +660,6 @@
       }
     });
 
-
     document.getElementById('menuDashboard').addEventListener('click', () => {
       document.getElementById('mainTitle').textContent = 'Welcome to Chill Relax Admin Dashboard';
       document.getElementById('mainDesc').textContent = 'This is your admin panel where you can manage sounds, mixes, uploads and users.';
@@ -648,7 +676,6 @@
     });
 
     document.getElementById('btnRefresh').addEventListener('click', loadStats);
-
 
     document.getElementById('uploadForm').addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -681,8 +708,12 @@
       }
     });
 
+    function logoutAdmin() {
+      localStorage.removeItem('user');
+      window.location.href = 'login.html';
+    }
+
     document.addEventListener('DOMContentLoaded', loadStats);
   </script>
 </body>
-
 </html>
