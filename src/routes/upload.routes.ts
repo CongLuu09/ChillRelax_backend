@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
-import { encryptFile } from '../utils/encrypt-file'
+import { encryptFile } from '../utils/encrypt-file';
 
 const router = express.Router();
 
@@ -47,6 +47,9 @@ const upload = multer({ storage });
  *               fileSound:
  *                 type: string
  *                 format: binary
+ *               category:
+ *                 type: string
+ *                 example: Citys Sounds
  *     responses:
  *       201:
  *         description: Trả về thông tin file đã lưu
@@ -55,10 +58,10 @@ router.post('/', upload.fields([
   { name: 'fileImage', maxCount: 1 },
   { name: 'fileSound', maxCount: 1 }
 ]), (req, res) => {
-  const { name } = req.body;
+  const { name, category } = req.body;
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
-  if (!name || !files.fileImage || !files.fileSound) {
+  if (!name || !category || !files.fileImage || !files.fileSound) {
     return res.status(400).json({ message: 'Thiếu thông tin upload' });
   }
 
@@ -71,14 +74,44 @@ router.post('/', upload.fields([
   encryptFile(rawImagePath, encryptedImagePath);
   encryptFile(rawSoundPath, encryptedSoundPath);
 
-  // Optionally: xoá file gốc không mã hoá
-  //  fs.unlinkSync(rawImagePath);
-  //  fs.unlinkSync(rawSoundPath);
+  // Optionally: Xoá file gốc không mã hoá
+  // fs.unlinkSync(rawImagePath);
+  // fs.unlinkSync(rawSoundPath);
 
-  return res.status(201).json({
+  // Ghi vào sounds.data.json
+  const now = Date.now();
+  const nowStr = new Date(now).toLocaleString('vi-VN', { hour12: false });
+  const dataPath = path.join(__dirname, '../../data/sounds.data.json');
+  let sounds: any[] = [];
+  if (fs.existsSync(dataPath)) {
+    try {
+      const raw = fs.readFileSync(dataPath, 'utf8');
+      sounds = JSON.parse(raw) || [];
+    } catch (e) {
+      sounds = [];
+    }
+  }
+  // Sinh id mới là lớn nhất + 1
+  const maxId = sounds.reduce((max, s) => (typeof s.id === 'number' && s.id > max ? s.id : max), 0);
+
+  // Trả về url KHÔNG có .enc
+  const getUrlWithoutEnc = (url: string) => url.endsWith('.enc') ? url.slice(0, -4) : url;
+
+  const newSound = {
+    id: maxId + 1,
     name,
-    fileImageUrl: `/public/images/${path.basename(encryptedImagePath)}`,
-    fileSoundUrl: `/public/sounds/${path.basename(encryptedSoundPath)}`
-  });
+    fileSoundUrl: getUrlWithoutEnc(`/public/sounds/${path.basename(encryptedSoundPath)}`),
+    fileImageUrl: getUrlWithoutEnc(`/public/images/${path.basename(encryptedImagePath)}`),
+    category,
+    createdAt: now,
+    createdAtStr: nowStr,
+    updatedAt: now,
+    updatedAtStr: nowStr
+  };
+  sounds.push(newSound);
+  fs.writeFileSync(dataPath, JSON.stringify(sounds, null, 2), 'utf8');
+
+  return res.status(201).json(newSound);
 });
+
 export default router;

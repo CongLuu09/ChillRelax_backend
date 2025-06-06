@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "username": "Hà Lâm",
+    "password": "Halam1902@#",
+    "email": "Halam7728@gmail.com",
+    "role": "user",
+    "createdAt": 1749182808579,
+    "updatedAt": 1749182808579
+  },
+  {
+    "id": 2,
+    "username": "Lâm An",
+    "password": "Anna1002@#",
+    "email": "Laman1002@gmail.com",
+    "role": "user",
+    "createdAt": 1749182886142,
+    "updatedAt": 1749182886142
+  },
+  {
+    "id": 3,
+    "username": "Cong Lv",
+    "password": "123456@#Cong",
+    "email": "cong090503@gmail.com",
+    "role": "admin",
+    "createdAt": 1749182886142,
+    "updatedAt": 1749182886142
+  },
+  {
+    "id": 4,
+    "username": "Vân",
+    "password": "3333",
+    "email": "ThanhVan1805@gmail.com",
+    "role": "user",
+    "createdAt": 1749187823960,
+    "updatedAt": 1749187823960
+  }
+]

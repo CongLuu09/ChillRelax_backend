@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chill Relax Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+    }
+    .sidebar {
+      height: 100vh;
+      width: 220px;
+      background-color: #212529;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 1rem;
+      position: fixed;
+      top: 0; left: 0;
+      overflow-y: auto;
+      box-shadow: 2px 0 5px rgb(0 0 0 / 0.5);
+      z-index: 10;
+    }
+    .sidebar h3 {
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      user-select: none;
+    }
+    .sidebar a {
+      padding: 12px 20px;
+      font-size: 1.05rem;
+      color: #adb5bd;
+      text-decoration: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      user-select: none;
+    }
+    .sidebar a:hover, .sidebar a.active {
+      background-color: #0d6efd;
+      color: #fff;
+      border-radius: 0 25px 25px 0;
+      text-decoration: none;
+    }
+    .sidebar a.btn-api-docs {
+      margin: 1rem 15px;
+      padding: 8px;
+      font-size: 0.95rem;
+      border-radius: 25px;
+      background: none;
+      border: 1.5px solid #adb5bd;
+      justify-content: center;
+    }
+    .sidebar a.btn-api-docs:hover {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+      color: #fff;
+    }
+    .content {
+      margin-left: 220px;
+      padding: 2.5rem 3rem;
+      flex-grow: 1;
+      background-color: #f8f9fa;
+      min-height: 100vh;
+    }
+    .content h1 {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 2.5rem;
+      user-select: none;
+    }
+    .content p {
+      font-size: 1.15rem;
+      color: #6c757d;
+      margin-bottom: 2rem;
+      user-select: none;
+    }
+    .dashboard-cards {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .dashboard-card {
+      flex: 1 1 220px;
+      background: #fff;
+      border-radius: 0.75rem;
+      box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.1);
+      padding: 1.5rem 2rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #495057;
+    }
+    .dashboard-card:hover {
+      background-color: #e9f0ff;
+      transform: translateY(-6px);
+      box-shadow: 0 1rem 2rem rgb(0 0 0 / 0.2);
+      color: #0d6efd;
+    }
+    .dashboard-card h5 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .dashboard-card .stat-number {
+      font-size: 3rem;
+      font-weight: 800;
+      color: inherit;
+      user-select: text;
+    }
+    .dashboard-card.sounds { color: #0d6efd; }
+    .dashboard-card.mixes { color: #198754; }
+    .dashboard-card.uploads { color: #ffc107; }
+    section.details {
+      margin-top: 3rem;
+      background: #fff;
+      border-radius: 0.75rem;
+      box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.1);
+      padding: 1.5rem 2rem;
+      user-select: none;
+    }
+    section.details h2 {
+      font-weight: 700;
+      margin-bottom: 1rem;
+      font-size: 1.75rem;
+      color: #212529;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      user-select: text;
+    }
+    thead tr {
+      background-color: #0d6efd;
+      color: #fff;
+      font-weight: 600;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #dee2e6;
+      text-align: left;
+      vertical-align: middle;
+    }
+    tbody tr:hover {
+      background-color: #e9ecef;
+    }
+    #btnRefresh {
+      margin-bottom: 2rem;
+      user-select: none;
+    }
+    #loadingSpinner {
+      display: none;
+      margin-left: 1rem;
+      width: 24px;
+      height: 24px;
+      border: 3px solid #0d6efd;
+      border-top: 3px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    /* User modal custom */
+    .modal .form-label { font-weight: 500; }
+    .modal .form-control:focus { border-color: #0d6efd; box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25); }
+    .btn-edit-user { margin-right: 0.5rem; }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <h3>Chill Relax Admin</h3>
+    <a href="#" class="active" id="menuDashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+    <a href="#" id="menuSounds"><i class="bi bi-music-note-list"></i> Manage Sounds</a>
+    <a href="#" id="menuMixes"><i class="bi bi-sliders"></i> Manage Mixes</a>
+    <a href="#" id="menuUploads"><i class="bi bi-upload"></i> Upload Files</a>
+    <a href="#" id="menuUsers"><i class="bi bi-people"></i> Manage Users</a>
+    <a href="#"><i class="bi bi-gear"></i> Settings</a>
+    <a href="/api-docs" class="btn-api-docs"><i class="bi bi-link-45deg"></i> API Docs</a>
+  </nav>
+
+  <main class="content">
+    <h1 id="mainTitle">Welcome to Chill Relax Admin Dashboard</h1>
+    <p id="mainDesc">This is your admin panel where you can manage sounds, mixes, uploads and users.</p>
+
+    <!-- Dashboard Section -->
+    <section id="dashboardSection">
+      <button id="btnRefresh" class="btn btn-primary" title="Reload all stats and detail table">
+        Refresh Stats
+        <span id="loadingSpinner"></span>
+      </button>
+      <section class="dashboard-cards">
+        <div id="cardTotalSounds" class="dashboard-card sounds" title="Click to see all sounds">
+          <h5><i class="bi bi-music-note-beamed"></i> Total Sounds</h5>
+          <div class="stat-number" id="totalSounds">--</div>
+        </div>
+        <div id="cardTotalMixes" class="dashboard-card mixes" title="Click to see all mixes">
+          <h5><i class="bi bi-sliders"></i> Total Mixes</h5>
+          <div class="stat-number" id="totalMixes">--</div>
+        </div>
+        <div id="cardUploadsPending" class="dashboard-card uploads" title="Click to upload new sound">
+          <h5><i class="bi bi-cloud-arrow-up"></i> Uploads Pending</h5>
+          <div class="stat-number" id="pendingUploads">--</div>
+        </div>
+      </section>
+      <section class="details" aria-live="polite" aria-atomic="true">
+        <h2>Details</h2>
+        <table class="table table-striped" id="detailsTable" role="table" aria-label="Details data table">
+          <thead>
+            <tr id="detailsTableHeader"></tr>
+          </thead>
+          <tbody id="detailsTableBody"></tbody>
+        </table>
+      </section>
+    </section>
+
+    <!-- Users Section -->
+    <section id="usersSection" style="display:none;">
+      <h2>Users</h2>
+      <button class="btn btn-success mb-3" id="btnAddUser"><i class="bi bi-person-plus"></i> Add User</button>
+      <table class="table table-striped align-middle" id="usersTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Created At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Add User Modal -->
+  <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="addUserForm" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="addUsername" class="form-label">Username</label>
+            <input class="form-control" type="text" id="addUsername" name="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="addPassword" class="form-label">Password</label>
+            <input class="form-control" type="password" id="addPassword" name="password" required>
+          </div>
+          <div class="mb-3">
+            <label for="addEmail" class="form-label">Email</label>
+            <input class="form-control" type="email" id="addEmail" name="email">
+          </div>
+          <div class="mb-3">
+            <label for="addRole" class="form-label">Role</label>
+            <select class="form-control" id="addRole" name="role">
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Add User</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit User Modal -->
+  <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="editUserForm" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editUserId" name="id">
+          <div class="mb-3">
+            <label for="editUsername" class="form-label">Username</label>
+            <input class="form-control" type="text" id="editUsername" name="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="editEmail" class="form-label">Email</label>
+            <input class="form-control" type="email" id="editEmail" name="email">
+          </div>
+          <div class="mb-3">
+            <label for="editRole" class="form-label">Role</label>
+            <select class="form-control" id="editRole" name="role">
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ...giữ nguyên modal upload... -->
+  <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="uploadForm" class="modal-content" enctype="multipart/form-data">
+        <div class="modal-header">
+          <h5 class="modal-title" id="uploadModalLabel">Upload New Sound</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="fileSound" class="form-label">Choose sound file</label>
+            <input class="form-control" type="file" id="fileSound" name="fileSound" accept="audio/*" required>
+          </div>
+          <div class="mb-3">
+            <label for="fileImage" class="form-label">Choose image</label>
+            <input class="form-control" type="file" id="fileImage" name="fileImage" accept="image/*" required>
+          </div>
+          <div class="mb-3">
+            <label for="soundName" class="form-label">Sound name</label>
+            <input class="form-control" type="text" id="soundName" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="soundCategory" class="form-label">Category</label>
+            <select class="form-control" id="soundCategory" name="category" required>
+              <option value="">-- Select category --</option>
+              <option value="Music">Music</option>
+              <option value="Animals Sounds">Animals Sounds</option>
+              <option value="Citys Sounds">Citys Sounds</option>
+              <option value="Chill & Relax">Chill & Relax</option>
+              <option value="Fire Sounds">Fire Sounds</option>
+              <option value="Nature Sounds">Nature Sounds</option>
+              <option value="Homes Sounds">Homes Sounds</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Upload</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+
+ document.addEventListener('DOMContentLoaded', function() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (!user || user.role !== 'admin') {
+      window.location.href = 'login.html';
+    }
+  });
+    
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    let currentDetailType = null; // "sounds" | "mixes" | "uploads"
+
+    async function fetchTotalSounds() {
+      try {
+        const res = await fetch('/api/sounds');
+        if (!res.ok) throw new Error('Failed to fetch sounds');
+        const json = await res.json();
+        if (json.data) return json.data;
+        if (Array.isArray(json)) return json;
+        return [];
+      } catch (error) {
+        console.error('Error fetching sounds:', error);
+        return [];
+      }
+    }
+
+    async function fetchTotalMixes() {
+      try {
+        const res = await fetch('/api/mix/all');
+        if (!res.ok) throw new Error('Failed to fetch mixes');
+        const json = await res.json();
+        if (Array.isArray(json)) return json;
+        if (json.data) return json.data;
+        return [];
+      } catch (error) {
+        console.error('Error fetching mixes:', error);
+        return [];
+      }
+    }
+
+    async function fetchPendingUploads() {
+      try {
+        const res = await fetch('/api/uploads/pending');
+        if (!res.ok) throw new Error('Failed to fetch pending uploads');
+        const json = await res.json();
+        if (json.data) return json.data;
+        if (Array.isArray(json)) return json;
+        return [];
+      } catch (error) {
+        console.error('Error fetching pending uploads:', error);
+        return [];
+      }
+    }
+
+    function renderTable(headers, data, renderRow) {
+      const thead = document.getElementById('detailsTableHeader');
+      const tbody = document.getElementById('detailsTableBody');
+      thead.innerHTML = '';
+      tbody.innerHTML = '';
+
+      headers.forEach(headerText => {
+        const th = document.createElement('th');
+        th.textContent = headerText;
+        thead.appendChild(th);
+      });
+
+      if (data.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td colspan="${headers.length}" class="text-center text-muted">No data available</td>`;
+        tbody.appendChild(tr);
+        return;
+      }
+
+      data.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = renderRow(item);
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function loadStats() {
+      loadingSpinner.style.display = 'inline-block';
+      const sounds = await fetchTotalSounds();
+      const mixes = await fetchTotalMixes();
+      const uploadsPending = await fetchPendingUploads();
+
+      document.getElementById('totalSounds').textContent = sounds.length;
+      document.getElementById('totalMixes').textContent = mixes.length;
+      document.getElementById('pendingUploads').textContent = uploadsPending.length;
+
+      if (currentDetailType === 'sounds') await showSoundsDetails(sounds);
+      else if (currentDetailType === 'mixes') await showMixesDetails(mixes);
+      else if (currentDetailType === 'uploads') await showUploadsPendingDetails();
+
+      loadingSpinner.style.display = 'none';
+    }
+
+    async function showSoundsDetails(preloadedData) {
+      currentDetailType = 'sounds';
+      const sounds = preloadedData || await fetchTotalSounds();
+      renderTable(
+        ['ID', 'Name', 'Category', 'Created At'],
+        sounds,
+        (item) => `
+          <td>${item.id}</td>
+          <td>${item.name}</td>
+          <td>${item.category}</td>
+          <td>${new Date(item.createdAt).toLocaleString()}</td>
+        `
+      );
+    }
+
+    async function showMixesDetails(preloadedData) {
+      currentDetailType = 'mixes';
+      const mixes = preloadedData || await fetchTotalMixes();
+      renderTable(
+        ['ID', 'Name', 'Device ID', 'Sound Count', 'Created At'],
+        mixes,
+        (item) => `
+          <td>${item.id}</td>
+          <td>${item.name}</td>
+          <td>${item.deviceId}</td>
+          <td>${item.soundIds.length}</td>
+          <td>${new Date(item.createdAt).toLocaleString()}</td>
+        `
+      );
+    }
+
+    async function showUploadsPendingDetails(preloadedData) {
+      currentDetailType = 'uploads';
+      const uploads = preloadedData || await fetchPendingUploads();
+      renderTable(
+        ['ID', 'File Name', 'Status', 'Uploaded At'],
+        uploads,
+        (item) => `
+          <td>${item.id}</td>
+          <td>${item.fileName || item.name || ''}</td>
+          <td>${item.status || 'Pending'}</td>
+          <td>${item.uploadedAt ? new Date(item.uploadedAt).toLocaleString() : ''}</td>
+        `
+      );
+    }
+
+    // Giả lập quyền admin (thực tế nên lấy từ xác thực)
+    const currentUserRole = 'admin';
+
+    // ...giữ nguyên các hàm fetchTotalSounds, fetchTotalMixes, fetchPendingUploads, renderTable, loadStats, showSoundsDetails, showMixesDetails, showUploadsPendingDetails...
+
+    // ========== USERS MANAGEMENT ==========
+    async function loadUsers() {
+      document.getElementById('mainTitle').textContent = 'Manage Users';
+      document.getElementById('mainDesc').textContent = 'View and manage all users in the system.';
+      document.getElementById('dashboardSection').style.display = 'none';
+      document.getElementById('usersSection').style.display = '';
+      try {
+        const res = await fetch('/api/users');
+        const users = await res.json();
+        const tbody = document.getElementById('usersTableBody');
+        tbody.innerHTML = '';
+        users.forEach(user => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${user.id}</td>
+            <td>${user.username}</td>
+            <td>${user.email || ''}</td>
+            <td>${user.role}</td>
+            <td>${user.createdAt ? new Date(user.createdAt).toLocaleString() : ''}</td>
+            <td>
+              <button class="btn btn-sm btn-primary btn-edit-user" data-id="${user.id}" data-username="${user.username}" data-email="${user.email || ''}" data-role="${user.role}"><i class="bi bi-pencil"></i> Edit</button>
+              <button class="btn btn-sm btn-danger btn-delete-user" data-id="${user.id}"><i class="bi bi-trash"></i> Delete</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+        // Gán sự kiện xóa user
+        document.querySelectorAll('.btn-delete-user').forEach(btn => {
+          btn.addEventListener('click', async function() {
+            if (currentUserRole !== 'admin') {
+              alert('Chỉ admin mới được xóa user!');
+              return;
+            }
+            if (confirm('Bạn có chắc muốn xóa user này?')) {
+              const id = this.getAttribute('data-id');
+              const res = await fetch(`/api/users/${id}`, { method: 'DELETE' });
+              if (res.ok) {
+                alert('Đã xóa user!');
+                loadUsers();
+              } else {
+                alert('Xóa user thất bại!');
+              }
+            }
+          });
+        });
+        // Gán sự kiện sửa user
+        document.querySelectorAll('.btn-edit-user').forEach(btn => {
+          btn.addEventListener('click', function() {
+            if (currentUserRole !== 'admin') {
+              alert('Chỉ admin mới được sửa user!');
+              return;
+            }
+            document.getElementById('editUserId').value = this.getAttribute('data-id');
+            document.getElementById('editUsername').value = this.getAttribute('data-username');
+            document.getElementById('editEmail').value = this.getAttribute('data-email');
+            document.getElementById('editRole').value = this.getAttribute('data-role');
+            const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+            modal.show();
+          });
+        });
+      } catch (err) {
+        alert('Không tải được danh sách user!');
+      }
+    }
+
+    // Thêm user mới
+    document.getElementById('btnAddUser').addEventListener('click', () => {
+      document.getElementById('addUserForm').reset();
+      const modal = new bootstrap.Modal(document.getElementById('addUserModal'));
+      modal.show();
+    });
+
+    document.getElementById('addUserForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      try {
+        const res = await fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (res.ok) {
+          alert('Thêm user thành công!');
+          bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
+          loadUsers();
+        } else {
+          const errMsg = await res.text();
+          alert('Thêm user thất bại!\n' + errMsg);
+        }
+      } catch (err) {
+        alert('Thêm user thất bại!\n' + err.message);
+      }
+    });
+
+    // Sửa user
+    document.getElementById('editUserForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const id = document.getElementById('editUserId').value;
+      const username = document.getElementById('editUsername').value;
+      const email = document.getElementById('editEmail').value;
+      const role = document.getElementById('editRole').value;
+      try {
+        const res = await fetch(`/api/users/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, role, currentUserRole })
+        });
+        if (res.ok) {
+          alert('Sửa user thành công!');
+          bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
+          loadUsers();
+        } else {
+          const errMsg = await res.text();
+          alert('Sửa user thất bại!\n' + errMsg);
+        }
+      } catch (err) {
+        alert('Sửa user thất bại!\n' + err.message);
+      }
+    });
+
+    // ========== SIDEBAR EVENTS ==========
+    document.getElementById('menuDashboard').addEventListener('click', () => {
+      document.getElementById('mainTitle').textContent = 'Welcome to Chill Relax Admin Dashboard';
+      document.getElementById('mainDesc').textContent = 'This is your admin panel where you can manage sounds, mixes, uploads and users.';
+      document.getElementById('dashboardSection').style.display = '';
+      document.getElementById('usersSection').style.display = 'none';
+    });
+    document.getElementById('menuUsers').addEventListener('click', loadUsers);
+
+    document.getElementById('cardTotalSounds').addEventListener('click', () => showSoundsDetails());
+    document.getElementById('cardTotalMixes').addEventListener('click', () => showMixesDetails());
+    document.getElementById('cardUploadsPending').addEventListener('click', () => {
+      const uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'));
+      uploadModal.show();
+    });
+
+    document.getElementById('btnRefresh').addEventListener('click', loadStats);
+
+    // Xử lý upload file
+    document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      if (
+        !formData.get('fileSound') ||
+        !formData.get('fileImage') ||
+        !formData.get('name') ||
+        !formData.get('category')
+      ) {
+        alert('Vui lòng chọn đầy đủ file nhạc, file ảnh, nhập tên sound và chọn category!');
+        return;
+      }
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        if (!res.ok) {
+          const errMsg = await res.text();
+          alert('Upload thất bại!\n' + errMsg);
+          throw new Error('Upload failed: ' + errMsg);
+        }
+        alert('Upload thành công!');
+        bootstrap.Modal.getInstance(document.getElementById('uploadModal')).hide();
+        await loadStats();
+        await showSoundsDetails();
+      } catch (err) {
+        alert('Upload thất bại!\n' + err.message);
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', loadStats);
+  </script>
+</body>
+
+</html>
