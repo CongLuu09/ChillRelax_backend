@@ -7,7 +7,7 @@ const mixDataPath = path.join(__dirname, '../../data/mixes.data.json');
 function readMixData(): Mix[] {
   try {
     if (!fs.existsSync(mixDataPath)) {
-      // Nếu file chưa có, trả về mảng rỗng
+
       return [];
     }
     const raw = fs.readFileSync(mixDataPath, 'utf-8');

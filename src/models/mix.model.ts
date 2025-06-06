@@ -3,5 +3,5 @@ export interface Mix {
   deviceId: string;
   name: string;
   soundIds: number[];
-  createdAt: string; // ISO string
+  createdAt: string;
 }

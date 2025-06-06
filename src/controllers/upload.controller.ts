@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 export function uploadFile(req: Request, res: Response) {
-  // Kiểm tra đủ trường
+ 
   if (
     !req.files ||
     !req.body.name ||
@@ -12,7 +12,7 @@ export function uploadFile(req: Request, res: Response) {
     return res.status(400).json({ message: 'Thiếu thông tin upload' });
   }
 
-  // Lấy file từ multer
+ 
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
   const fileImage = files.fileImage?.[0];
   const fileSound = files.fileSound?.[0];
@@ -20,7 +20,7 @@ export function uploadFile(req: Request, res: Response) {
     return res.status(400).json({ message: 'Thiếu file upload' });
   }
 
-  // Tạo object sound mới
+ 
   const now = new Date();
   const newSound = {
     id: Date.now(),
@@ -32,7 +32,7 @@ export function uploadFile(req: Request, res: Response) {
     updatedAt: now.toISOString()
   };
 
-  // Đường dẫn file data
+  
   const dataPath = path.join(__dirname, '../../data/sounds.data.json');
   let sounds: any[] = [];
   if (fs.existsSync(dataPath)) {
@@ -44,12 +44,12 @@ export function uploadFile(req: Request, res: Response) {
     }
   }
 
-  // Thêm sound mới vào mảng
+  
   sounds.push(newSound);
 
-  // Ghi lại file
+ 
   fs.writeFileSync(dataPath, JSON.stringify(sounds, null, 2), 'utf8');
 
-  // Trả về kết quả
+ 
   return res.status(201).json(newSound);
 }

@@ -17,16 +17,16 @@ export function getSounds(req: Request, res: Response) {
       }
 
       const sounds = getSoundsByIds(ids);
-      return res.json(sounds); // Trả về mảng thuần
+      return res.json(sounds); 
     }
 
     if (category) {
       const sounds = getSoundsByCategory(category);
-      return res.json(sounds); // Trả về mảng thuần
+      return res.json(sounds); 
     }
 
     const allSounds = getAllSounds();
-    return res.json(allSounds); // Trả về mảng thuần
+    return res.json(allSounds); 
   } catch (error) {
     console.error('Error in getSounds:', error);
     return res.status(500).json({ success: false, message: 'Internal server error' });
@@ -36,7 +36,7 @@ export function getSounds(req: Request, res: Response) {
 export function getSoundsCountHandler(req: Request, res: Response) {
   try {
     const count = getSoundsCount();
-    return res.json({ count }); // Trả về object chỉ chứa count
+    return res.json({ count }); 
   } catch (error) {
     console.error('Error in getSoundsCountHandler:', error);
     return res.status(500).json({ success: false, message: 'Internal server error' });

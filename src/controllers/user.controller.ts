@@ -2,10 +2,10 @@ import { Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
 
-// Đường dẫn file data
+
 const dataPath = path.join(__dirname, '../../data/users.data.json');
 
-// Đọc danh sách user
+
 function readUsers() {
   if (!fs.existsSync(dataPath)) return [];
   const raw = fs.readFileSync(dataPath, 'utf8');
@@ -16,21 +16,21 @@ function readUsers() {
   }
 }
 
-// Ghi danh sách user
+
 function writeUsers(users: any[]) {
   fs.writeFileSync(dataPath, JSON.stringify(users, null, 2), 'utf8');
 }
 
-// Lấy danh sách user
+
 export function getAllUsers(req: Request, res: Response) {
   const users = readUsers().map((u: { [x: string]: any; password: any; }) => {
     const { password, ...rest } = u;
-    return rest; // Không trả về password
+    return rest; 
   });
   res.json(users);
 }
 
-// Thêm user mới
+
 export function addUser(req: Request, res: Response) {
   const { username, password, email, role } = req.body;
   if (!username || !password) {
@@ -45,7 +45,7 @@ export function addUser(req: Request, res: Response) {
   const newUser = {
     id,
     username,
-    password, // Thực tế nên hash password!
+    password, 
     email: email || '',
     role: role || 'user',
     createdAt: now,
@@ -57,7 +57,7 @@ export function addUser(req: Request, res: Response) {
   res.status(201).json(rest);
 }
 
-// Xóa user
+
 export function deleteUser(req: Request, res: Response) {
   const id = Number(req.params.id);
   let users = readUsers();
@@ -68,7 +68,7 @@ export function deleteUser(req: Request, res: Response) {
   res.json({ message: 'Đã xóa user' });
 }
 
-// Sửa user (chỉ admin)
+
 export function updateUser(req: Request, res: Response) {
   const { id } = req.params;
   const { username, email, role, currentUserRole } = req.body;

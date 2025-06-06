@@ -78,7 +78,7 @@ router.post('/', upload.fields([
   // fs.unlinkSync(rawImagePath);
   // fs.unlinkSync(rawSoundPath);
 
-  // Ghi vào sounds.data.json
+
   const now = Date.now();
   const nowStr = new Date(now).toLocaleString('vi-VN', { hour12: false });
   const dataPath = path.join(__dirname, '../../data/sounds.data.json');
@@ -91,10 +91,10 @@ router.post('/', upload.fields([
       sounds = [];
     }
   }
-  // Sinh id mới là lớn nhất + 1
+
   const maxId = sounds.reduce((max, s) => (typeof s.id === 'number' && s.id > max ? s.id : max), 0);
 
-  // Trả về url KHÔNG có .enc
+
   const getUrlWithoutEnc = (url: string) => url.endsWith('.enc') ? url.slice(0, -4) : url;
 
   const newSound = {

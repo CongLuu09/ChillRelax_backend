@@ -18,7 +18,7 @@ const viewsDir = path.join(__dirname, '..', 'views');
 app.use(express.json());
 app.use(express.static(viewsDir));
 
-// API routes
+
 app.use('/api/sounds', soundRoutes);
 app.use('/api/mix', mixRoutes);``
 app.use('/api/upload', uploadRoutes);
@@ -26,22 +26,22 @@ app.use('/api/users', userRoutes);
 app.use('/api', authRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Trang đăng nhập
+
 app.get('/login', (req, res) => {
   res.sendFile(path.join(viewsDir, 'login.html'));
 });
 
-// Trang dashboard cho user
+
 app.get('/user-dashboard', (req, res) => {
   res.sendFile(path.join(viewsDir, 'user-dashboard.html'));
 });
 
-// Trang dashboard cho admin
+
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(viewsDir, 'index.html'));
 });
 
-// Trang chủ mặc định chuyển về login
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(viewsDir, 'login.html'));
 });

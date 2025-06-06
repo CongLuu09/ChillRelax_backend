@@ -1,9 +1,9 @@
 export interface User {
   id: number;
   username: string;
-  password: string; // Nên hash khi lưu
+  password: string; 
   email?: string;
   role: 'admin' | 'user';
-  createdAt: number; // milliseconds
-  updatedAt: number; // milliseconds
+  createdAt: number;
+  updatedAt: number;
 }

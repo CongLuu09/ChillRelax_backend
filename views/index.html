@@ -177,7 +177,7 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-    /* User modal custom */
+
     .modal .form-label { font-weight: 500; }
     .modal .form-control:focus { border-color: #0d6efd; box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25); }
     .btn-edit-user { margin-right: 0.5rem; }
@@ -199,7 +199,7 @@
     <h1 id="mainTitle">Welcome to Chill Relax Admin Dashboard</h1>
     <p id="mainDesc">This is your admin panel where you can manage sounds, mixes, uploads and users.</p>
 
-    <!-- Dashboard Section -->
+
     <section id="dashboardSection">
       <button id="btnRefresh" class="btn btn-primary" title="Reload all stats and detail table">
         Refresh Stats
@@ -230,7 +230,7 @@
       </section>
     </section>
 
-    <!-- Users Section -->
+
     <section id="usersSection" style="display:none;">
       <h2>Users</h2>
       <button class="btn btn-success mb-3" id="btnAddUser"><i class="bi bi-person-plus"></i> Add User</button>
@@ -250,7 +250,6 @@
     </section>
   </main>
 
-  <!-- Add User Modal -->
   <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <form id="addUserForm" class="modal-content">
@@ -287,7 +286,7 @@
     </div>
   </div>
 
-  <!-- Edit User Modal -->
+
   <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <form id="editUserForm" class="modal-content">
@@ -321,7 +320,7 @@
     </div>
   </div>
 
-  <!-- ...giữ nguyên modal upload... -->
+
   <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <form id="uploadForm" class="modal-content" enctype="multipart/form-data">
@@ -508,12 +507,10 @@
       );
     }
 
-    // Giả lập quyền admin (thực tế nên lấy từ xác thực)
     const currentUserRole = 'admin';
 
-    // ...giữ nguyên các hàm fetchTotalSounds, fetchTotalMixes, fetchPendingUploads, renderTable, loadStats, showSoundsDetails, showMixesDetails, showUploadsPendingDetails...
+   
 
-    // ========== USERS MANAGEMENT ==========
     async function loadUsers() {
       document.getElementById('mainTitle').textContent = 'Manage Users';
       document.getElementById('mainDesc').textContent = 'View and manage all users in the system.';
@@ -539,7 +536,7 @@
           `;
           tbody.appendChild(tr);
         });
-        // Gán sự kiện xóa user
+
         document.querySelectorAll('.btn-delete-user').forEach(btn => {
           btn.addEventListener('click', async function() {
             if (currentUserRole !== 'admin') {
@@ -558,7 +555,7 @@
             }
           });
         });
-        // Gán sự kiện sửa user
+
         document.querySelectorAll('.btn-edit-user').forEach(btn => {
           btn.addEventListener('click', function() {
             if (currentUserRole !== 'admin') {
@@ -578,7 +575,7 @@
       }
     }
 
-    // Thêm user mới
+
     document.getElementById('btnAddUser').addEventListener('click', () => {
       document.getElementById('addUserForm').reset();
       const modal = new bootstrap.Modal(document.getElementById('addUserModal'));
@@ -608,7 +605,7 @@
       }
     });
 
-    // Sửa user
+
     document.getElementById('editUserForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const id = document.getElementById('editUserId').value;
@@ -634,7 +631,7 @@
       }
     });
 
-    // ========== SIDEBAR EVENTS ==========
+
     document.getElementById('menuDashboard').addEventListener('click', () => {
       document.getElementById('mainTitle').textContent = 'Welcome to Chill Relax Admin Dashboard';
       document.getElementById('mainDesc').textContent = 'This is your admin panel where you can manage sounds, mixes, uploads and users.';
@@ -652,7 +649,7 @@
 
     document.getElementById('btnRefresh').addEventListener('click', loadStats);
 
-    // Xử lý upload file
+
     document.getElementById('uploadForm').addEventListener('submit', async function (e) {
       e.preventDefault();
       const formData = new FormData(this);
