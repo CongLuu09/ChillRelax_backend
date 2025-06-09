@@ -3,9 +3,8 @@ import crypto from 'crypto';
 import path from 'path';
 
 const algorithm = 'aes-256-cbc';
-const key = crypto.scryptSync(process.env.ENCRYPT_KEY || 'default-key', 'salt', 32); // 256-bit
-const iv = Buffer.alloc(16, 0); // Khởi tạo vector
-
+const key = crypto.scryptSync(process.env.ENCRYPT_KEY || 'default-key', 'salt', 32); 
+const iv = Buffer.alloc(16, 0); 
 export function encryptFile(inputPath: string, outputPath: string) {
   const cipher = crypto.createCipheriv(algorithm, key, iv);
   const input = fs.createReadStream(inputPath);

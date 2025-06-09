@@ -14,11 +14,11 @@ const PORT = 3000;
 const publicDir = path.join(__dirname, '..', 'public');
 const viewsDir = path.join(__dirname, '..', 'views');
 
-// Middleware
+
 app.use(express.json());
 app.use(express.static(publicDir));
 
-// API Routes
+
 app.use('/api/sounds', soundRoutes);
 app.use('/api/mix', mixRoutes);
 app.use('/api/upload', uploadRoutes);
