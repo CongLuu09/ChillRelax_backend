@@ -7,92 +7,265 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <style>
-    body {
-      min-height: 100vh;
-      background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .login-bg-anim {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .login-bg-anim span {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.18;
+    filter: blur(16px);
+    animation: floatAnim 8s infinite alternate;
+  }
+
+  .login-bg-anim .c1 { width: 220px; height: 220px; background: #0d6efd; left: 5vw; top: 10vh; animation-delay: 0s; }
+  .login-bg-anim .c2 { width: 160px; height: 160px; background: #43e97b; right: 8vw; top: 20vh; animation-delay: 2s; }
+  .login-bg-anim .c3 { width: 120px; height: 120px; background: #ffc107; left: 20vw; bottom: 8vh; animation-delay: 4s; }
+
+  @keyframes floatAnim {
+    from { transform: scale(1) translateY(0); }
+    to { transform: scale(1.1) translateY(30px); }
+  }
+
+  .login-box {
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 1.7rem;
+    box-shadow: 0 0.5rem 2.5rem #0d6efd33, 0 2px 24px #43e97b22;
+    padding: 2.7rem 2.2rem 2.2rem 2.2rem;
+    width: 100%;
+    max-width: 390px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 0.7s;
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .login-logo {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 1.2rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0d6efd 60%, #43e97b 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.7rem;
+    color: #fff;
+    box-shadow: 0 0.25rem 1.2rem #0d6efd33;
+    border: 3px solid #fff;
+    transition: box-shadow 0.3s;
+  }
+
+  .login-logo:hover {
+    box-shadow: 0 0.5rem 2.5rem #43e97b55;
+  }
+
+  .login-box h2 {
+    font-weight: 900;
+    color: #0d6efd;
+    margin-bottom: 1.6rem;
+    text-align: center;
+    letter-spacing: 1.2px;
+    text-shadow: 0 2px 12px #0d6efd22;
+  }
+
+  .form-label {
+    font-weight: 700;
+    color: #0d6efd;
+    letter-spacing: 0.5px;
+  }
+
+  .input-group {
+    border-radius: 0.8rem;
+    overflow: hidden;
+    border: 2px solid #e0e7ff;
+    background: #ffffff;
+    box-shadow: 0 4px 16px rgba(13, 110, 253, 0.15);
+    position: relative;
+    margin-bottom: 0.8rem;
+    transition: all 0.3s ease;
+  }
+
+  .input-group:focus-within {
+    border-color: #0d6efd;
+    box-shadow: 0 6px 24px rgba(13, 110, 253, 0.25);
+  }
+
+  .input-group::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 0.8rem;
+    background: linear-gradient(90deg, #0d6efd44, #43e97b44);
+    filter: blur(12px);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .input-group:focus-within::after {
+    opacity: 1;
+  }
+
+  .input-group-text {
+    background: linear-gradient(120deg, #cce5ff, #e0f7fa);
+    color: #0d6efd;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .form-control {
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: #212529;
+  }
+
+  .form-control:focus {
+    background: #e0f0ff;
+    border: none;
+    box-shadow: none;
+  }
+
+  .btn-primary {
+    width: 100%;
+    font-weight: 800;
+    letter-spacing: 1px;
+    border-radius: 0.8rem;
+    margin-top: 0.7rem;
+    background: linear-gradient(90deg, #0d6efd 60%, #43e97b 100%);
+    border: none;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 12px #0d6efd22;
+    font-size: 1.13rem;
+    padding: 0.7rem 0;
+    position: relative;
+  }
+
+  .btn-primary:active, .btn-primary:focus {
+    box-shadow: 0 4px 24px #43e97b33;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(90deg, #43e97b 60%, #0d6efd 100%);
+    box-shadow: 0 4px 24px #43e97b33;
+  }
+
+  .show-hide-btn {
+    background: none;
+    border: none;
+    color: #0d6efd;
+    font-size: 1.2rem;
+    padding: 0 0.7rem;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .show-hide-btn:hover {
+    color: #43e97b;
+  }
+
+  .alert {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.97rem;
+    border-radius: 0.7rem;
+    box-shadow: 0 2px 12px #dc354522;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .login-footer {
+    margin-top: 1.5rem;
+    font-size: 0.98rem;
+    color: #6c757d;
+    text-align: center;
+    letter-spacing: 0.3px;
+    opacity: 0.8;
+  }
+
+  .login-footer a {
+    color: #0d6efd;
+    text-decoration: underline;
+    font-weight: 700;
+    transition: color 0.2s;
+  }
+
+  .login-footer a:hover {
+    color: #43e97b;
+  }
+
+  .login-loading {
+    position: absolute;
+    right: 1.2rem;
+    top: 0.7rem;
+    width: 28px;
+    height: 28px;
+    border: 3px solid #0d6efd;
+    border-top: 3px solid #43e97b;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 2;
+    display: none;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 480px) {
     .login-box {
-      background: #fff;
-      border-radius: 1.5rem;
-      box-shadow: 0 0.5rem 2rem #0d6efd22;
-      padding: 2.5rem 2rem 2rem 2rem;
-      width: 100%;
-      max-width: 370px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      animation: fadeIn 0.7s;
+      padding: 1.5rem 0.5rem;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(40px);}
-      to { opacity: 1; transform: none;}
-    }
+
     .login-logo {
-      width: 64px;
-      height: 64px;
-      margin-bottom: 1rem;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #0d6efd 60%, #a1c4fd 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      color: #fff;
-      box-shadow: 0 0.25rem 1rem #0d6efd33;
+      width: 54px;
+      height: 54px;
+      font-size: 2rem;
     }
+
     .login-box h2 {
-      font-weight: 800;
-      color: #0d6efd;
-      margin-bottom: 1.5rem;
-      text-align: center;
-      letter-spacing: 1px;
+      font-size: 1.3rem;
     }
-    .form-label {
-      font-weight: 600;
-      color: #0d6efd;
-    }
-    .form-control {
-      border-radius: 0.5rem;
-      border: 1.5px solid #e0e7ff;
-      transition: border-color 0.2s;
-    }
-    .form-control:focus {
-      border-color: #0d6efd;
-      box-shadow: 0 0 0 0.15rem rgba(13,110,253,.13);
-    }
-    .btn-primary {
-      width: 100%;
-      font-weight: 700;
-      letter-spacing: 1px;
-      border-radius: 0.5rem;
-      margin-top: 0.5rem;
-      background: linear-gradient(90deg, #0d6efd 60%, #5fa8ff 100%);
-      border: none;
-      transition: background 0.2s;
-    }
-    .btn-primary:hover {
-      background: linear-gradient(90deg, #0b5ed7 60%, #3b82f6 100%);
-    }
-    .alert {
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      font-size: 0.97rem;
-    }
-    @media (max-width: 480px) {
-      .login-box { padding: 1.5rem 0.5rem; }
-    }
-  </style>
+  }
+</style>
+
 </head>
 <body>
+  <div class="login-bg-anim">
+    <span class="c1"></span>
+    <span class="c2"></span>
+    <span class="c3"></span>
+  </div>
   <div class="login-box">
     <div class="login-logo">
       <i class="bi bi-moon-stars-fill"></i>
     </div>
     <h2>Chill Relax Login</h2>
-    <form id="loginForm" autocomplete="off" style="width:100%;">
+    <form id="loginForm" autocomplete="off" style="width:100%; position:relative;">
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
         <div class="input-group">
@@ -105,25 +278,44 @@
         <div class="input-group">
           <span class="input-group-text"><i class="bi bi-lock"></i></span>
           <input class="form-control" type="password" id="password" required />
+          <button type="button" class="show-hide-btn" tabindex="-1" id="togglePassword"><i class="bi bi-eye"></i></button>
         </div>
       </div>
+      <span class="login-loading" id="loginLoading"></span>
       <button type="submit" class="btn btn-primary">Login</button>
       <div id="loginAlert" class="alert alert-danger d-none" role="alert"></div>
     </form>
+    <div class="login-footer">
+      &copy; 2025 Chill Relax. <a href="mailto:support@chillrelax.com">Liên hệ hỗ trợ</a>
+    </div>
   </div>
   <script>
+  
+    document.getElementById('togglePassword').onclick = function() {
+      const pw = document.getElementById('password');
+      const icon = this.querySelector('i');
+      if (pw.type === 'password') {
+        pw.type = 'text'; icon.className = 'bi bi-eye-slash';
+      } else {
+        pw.type = 'password'; icon.className = 'bi bi-eye';
+      }
+    };
+   
+    const loading = document.getElementById('loginLoading');
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value.trim();
       const alertBox = document.getElementById('loginAlert');
       alertBox.classList.add('d-none');
+      loading.style.display = 'inline-block';
       try {
         const res = await fetch('/api/login', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({ username, password })
         });
+        loading.style.display = 'none';
         if (!res.ok) {
           alertBox.textContent = 'Sai tài khoản hoặc mật khẩu!';
           alertBox.classList.remove('d-none');
@@ -137,6 +329,7 @@
           window.location.href = 'user-dashboard.html';
         }
       } catch (err) {
+        loading.style.display = 'none';
         alertBox.textContent = 'Lỗi kết nối server!';
         alertBox.classList.remove('d-none');
       }

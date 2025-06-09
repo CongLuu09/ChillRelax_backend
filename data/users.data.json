@@ -34,5 +34,14 @@
     "role": "user",
     "createdAt": 1749187823960,
     "updatedAt": 1749187823960
+  },
+  {
+    "id": 5,
+    "username": "Bảo Long",
+    "password": "bazo1209@#",
+    "email": "Bazo8829@gmail.com",
+    "role": "user",
+    "createdAt": 1749446300606,
+    "updatedAt": 1749446300606
   }
 ]
