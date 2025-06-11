@@ -8,6 +8,7 @@ import authRoutes from './routes/auth.routes';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger.config';
 
+
 const app = express();
 const PORT = 3000;
 
