@@ -7,6 +7,7 @@ import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger.config';
+import categoryRoutes from "./routes/category.route";
 
 
 const app = express();
@@ -25,6 +26,7 @@ app.use('/api/mix', mixRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api', authRoutes);
+app.use('/api/categories', categoryRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
