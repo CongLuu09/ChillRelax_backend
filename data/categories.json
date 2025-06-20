@@ -5,19 +5,9 @@
     "id": 1749806019523
   },
   {
-    "name": "Forest",
-    "imageUrl": "/categories/file-1749806687664-207692896.png",
+    "name": "Rain",
+    "imageUrl": "/categories/file-1750048029541-863059253.png",
     "id": 1749806687952
-  },
-  {
-    "name": "Rain ",
-    "imageUrl": "/categories/file-1749806719137-741047198.png",
-    "id": 1749806719303
-  },
-  {
-    "name": "Night ",
-    "imageUrl": "/categories/file-1749806743628-737791443.png",
-    "id": 1749806744826
   },
   {
     "name": "Fire",
@@ -68,5 +58,10 @@
     "name": "Downtown Dreams",
     "imageUrl": "/categories/file-1749807716557-590197594.jpg",
     "id": 1749807718926
+  },
+  {
+    "name": "Midnight",
+    "imageUrl": "/categories/file-1750049607022-457137193.jpg",
+    "id": 1750049607031
   }
 ]
